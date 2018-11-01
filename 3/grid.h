@@ -118,10 +118,12 @@ void grid::fill()
 
 void grid::wordGenerator()
 {
-	numChars = numRows * numCols;
+  numChars = numRows * numCols;
   int direction = 0;
-	string word;
+  int count = 0;
+  string word;
   int back_j, back_k;
+  int x, y; //row, col
 
   ofstream fout;
   string filename = "words.txt"; //open file created in makeFile()
@@ -134,76 +136,34 @@ void grid::wordGenerator()
 
   else
   {
-    while(numChars > 0)
-    {
-  		for(int j = 0; j < numRows; j++)
-    	{
-        direction = 0;
-      	for(int k = 0; k < numCols; k++)
-  	    {
-          back_j = j-1;
-          back_k = k-1;
-          if (j == -1)
-          {
-            j = numRows - 1;
-            continue;
-          }
-          else if(j == numRows)
-          {
-            j = 0;
-            continue;
-          }
-          else if(k == -1)
-          {
-            k = numRows - 1;
-            continue;
-          }
-          else if(k == numCols)
-          {
-            k = 0;
-            continue;
-          }
+  	for(int j = 0; j < numRows-1; j++)
+  	{
+      direction = 0;
+    	for(int k = 0; k < numCols; k++)
+      {
+  			x = 0;
+  			y = 0;
+        count = 0;
+        direction++;
 
-          //gridWords.push_back(word);
-          fout<<word;
-          fout<<"\n";
-          direction++;
+        switch(direction)
+        {
+          case 1:
+            x = j;
+            while(count <= numRows)
+            {
+              word += mat[x][k];
+              fout<< word<< "\n";
+              x++;
+              if(x == numRows)
+                x = 0;
+              count++;
+            }
+            //continue;
+        }
 
-          switch(direction)
-          {
-            case 1:
-              word += mat[j][k];
-              continue;
-            case 2:
-              word += mat[j][k+1];
-              continue;
-            case 3:
-              word += mat[j+1][k+1];
-              continue;
-            case 4:
-              word += mat[j+1][k];
-              continue;
-            case 5:
-              word += mat[j+1][back_k];
-              continue;
-            case 6:
-              word += mat[j][back_k];
-              continue;
-            case 7:
-              word += mat[back_j][back_k];
-              continue;
-            case 8:
-              word += mat[back_j][k];
-              continue;
-            case 9:
-              word += mat[back_j][k+1];
-              continue;
-          }
-       }
-
-	 }
-   numChars--;
-   }
- }
- fout.close();
+      }
+    }
+  }
+  fout.close();
 }
