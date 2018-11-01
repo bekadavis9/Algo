@@ -89,8 +89,10 @@ void grid::fill()
 {
   char letter;
   int count = 0;
-  vector <char> filler;
+  //vector <char> filler;
   numChars = numRows * numCols;   //number of characters in grid
+  char filler[numChars];
+
 
   ifstream fin;
   string filename = "grid.txt"; //open file created in makeFile()
@@ -103,14 +105,18 @@ void grid::fill()
 
   while(!fin.eof())
   {
-    for(int j = 0; j < numRows-1; j++)
-  	{
-      cout<<"\n";
-  		for(int k = 0; k < numCols; k++)
-  		{
-        fin>>mat[j][k];
+    fin>>letter;
+    filler[count] = letter;
+    count++;
+  }
+
+  for(int j = 0; j < numRows; j++)
+  {
+    cout<<"\n";
+    for(int k = 0; k < numCols; k++)
+    {
+        mat[j][k] = filler[j+k];
         cout<<mat[j][k];
-      }
     }
   }
 	fin.close();
@@ -134,6 +140,7 @@ void grid::wordGenerator()
     cout<<"ERROR: could not open file."<<endl;
   }
 
+
   else
   {
   	for(int j = 0; j < numRows-1; j++)
@@ -145,12 +152,13 @@ void grid::wordGenerator()
   			y = 0;
         count = 0;
         direction++;
+        word = "";
 
         switch(direction)
         {
           case 1:
             x = j;
-            while(count <= numRows)
+            while(count != numRows)
             {
               word += mat[x][k];
               fout<< word<< "\n";
@@ -159,7 +167,7 @@ void grid::wordGenerator()
                 x = 0;
               count++;
             }
-            //continue;
+            break;
         }
 
       }
