@@ -18,30 +18,26 @@ using namespace std;
 class grid
 {
   public:
-    //void changeSize();    //resize matrix
+    void resize();
     void setNumRows();    //user input for matrix size
     void setNumCols();
-    //int getNumRows();     //return size
-    //int getNumCols();
     void makeFile();      //random char generator for grid
     void fill();          //fill grid with random chars
     void wordGenerator(); //find words in grid
-    void pls();
 
   private:
     int numRows;
     int numCols;
+    int numChars;
     int x;                //placeholder int
     matrix <char> mat;    //matrix for grid
     vector <string> words;
 };
 
-/*
-void grid::changeSize()
+void grid::resize()
 {
   mat.resize(numRows, numCols);
 }
-*/
 
 void grid::setNumRows()
 {
@@ -57,18 +53,6 @@ void grid::setNumCols()
   numCols = x;
 }
 
-/*
-int grid::getNumRows()
-{
-  return numRows;
-}
-
-int grid::getNumCols()
-{
-  return numCols;
-}
-*/
-
 //make file of random characters (lowercase letters)
 void grid::makeFile()
 {
@@ -82,13 +66,11 @@ void grid::makeFile()
   fout.open(filename.c_str());
 
   if(!fout)
-  {
     cout<<"ERROR: could not open file."<<endl;
-  }
 
   else
   {
-    fout<<numRows<<numCols<<"\n";
+    //fout<<numRows<<" " <<numCols<<"\n";
     for(int j = 0; j<numRows; j++)
     {
       for(int k = 0; k<numCols; k++)
@@ -107,7 +89,8 @@ void grid::fill()
 {
   char letter;
   int count = 0;
-  int numChars = numRows * numCols;   //number of characters in grid
+  vector <char> filler;
+  numChars = numRows * numCols;   //number of characters in grid
 
   ifstream fin;
   string filename = "grid.txt"; //open file created in makeFile()
@@ -119,32 +102,23 @@ void grid::fill()
   }
 
   while(!fin.eof())
-	{
-		fin>> numRows>> numCols;
-    mat.resize(numRows, numCols);             //take in char from file
-		//filler.push_back(letter);   //put char in temp vector
-	}
-
-  while(count < numChars)
   {
-    for(int j = 0; j < numRows; j++)
+    for(int j = 0; j < numRows-1; j++)
   	{
+      cout<<"\n";
   		for(int k = 0; k < numCols; k++)
   		{
-  			//cout<< filler[count];        //print grid
-  			//mat[j][k] = filler[count];   //put temp vector into grid
         fin>>mat[j][k];
         cout<<mat[j][k];
-  		}
-      cout<<"\n";
-  	}
+      }
+    }
   }
 	fin.close();
 }
 
 void grid::wordGenerator()
 {
-	int numChars = (numRows * numCols) + 1;
+	numChars = numRows * numCols;
   int direction = 0;
 	string word;
   int back_j, back_k;
@@ -162,11 +136,8 @@ void grid::wordGenerator()
   {
     while(numChars > 0)
     {
-      fout<<numChars;
-      /*
   		for(int j = 0; j < numRows; j++)
     	{
-        numChars --;
         direction = 0;
       	for(int k = 0; k < numCols; k++)
   	    {
@@ -195,6 +166,7 @@ void grid::wordGenerator()
 
           //gridWords.push_back(word);
           fout<<word;
+          fout<<"\n";
           direction++;
 
           switch(direction)
@@ -228,20 +200,10 @@ void grid::wordGenerator()
               continue;
           }
        }
-		}*/
-	}
-  numChars--;
-  }
-  fout.close();
-}
 
-void grid::pls()
-{
-  ofstream fout;
-  string filename = "pls.txt"; //create output file
-  fout.open(filename.c_str());
-  string test = "testing\n";
-  fout<<test;
-  fout<<"pls work";
-  fout.close();
+	 }
+   numChars--;
+   }
+ }
+ fout.close();
 }

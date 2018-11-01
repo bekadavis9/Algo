@@ -17,6 +17,7 @@ int main()
 
   g.setNumRows();
   g.setNumCols();
+  g.resize();
   g.makeFile();
   g.fill();
   g.wordGenerator();
