@@ -124,12 +124,10 @@ void grid::fill()
 
 void grid::wordGenerator()
 {
-  numChars = numRows * numCols;
   int direction = 0;
   int count = 0;
   string word;
-  int back_j, back_k;
-  int x, y; //row, col
+  int x, y = 0; //row, col
 
   ofstream fout;
   string filename = "words.txt"; //open file created in makeFile()
@@ -140,36 +138,140 @@ void grid::wordGenerator()
     cout<<"ERROR: could not open file."<<endl;
   }
 
-
   else
   {
-  	for(int j = 0; j < numRows-1; j++)
+  	for(int j = 0; j < numRows; j++)
   	{
       direction = 0;
     	for(int k = 0; k < numCols; k++)
       {
-  			x = 0;
-  			y = 0;
         count = 0;
         direction++;
-        word = "";
 
         switch(direction)
         {
           case 1:
             x = j;
-            while(count != numRows)
+            word = "";
+            while(count < numRows)
             {
               word += mat[x][k];
               fout<< word<< "\n";
               x++;
+              count++;
               if(x == numRows)
                 x = 0;
-              count++;
             }
             break;
-        }
+/*
+          case 2:
+            y = k;
+            while(count < numCols)
+            {
+              word += mat[j][y];
+              fout<< word<< "\n";
+              y++;
+              count++;
+              if(y == numCols)
+                y = 0;
+            }
+            break;
 
+          case 3:
+            x = j;
+            while(count < numRows)
+            {
+              word += mat[x][k];
+              fout<< word<< "\n";
+              x--;
+              count++;
+              if(x == -1)
+                x = numRows;
+            }
+            break;
+
+          case 4:
+            y = k;
+            while(count < numCols)
+            {
+              word += mat[j][y];
+              fout<< word<< "\n";
+              y--;
+              count++;
+              if(y == -1)
+                y = numCols;
+            }
+            break;
+
+          case 5:
+            x = j;
+            y = k;
+            while(count < numRows)
+            {
+              word += mat[x][y];
+              fout<< word<< "\n";
+              x++;
+              y++;
+              count++;
+              if(x == numRows)
+                x = 0;
+              if(y == numCols)
+                y = 0;
+            }
+            break;
+
+          case 6:
+            x = j;
+            y = k;
+            while(count < numRows)
+            {
+              word += mat[x][y];
+              fout<< word<< "\n";
+              x--;
+              y++;
+              count++;
+              if(x == -1)
+                x = numRows;
+              if(y == numCols)
+                y = 0;
+            }
+            break;
+
+          case 7:
+            x = j;
+            y = k;
+            while(count < numRows)
+            {
+              word += mat[x][y];
+              fout<< word<< "\n";
+              x--;
+              y--;
+              count++;
+              if(x == -1)
+                x = numRows;
+              if(y == -1)
+                y = numCols;
+            }
+            break;
+
+          case 8:
+            x = j;
+            y = k;
+            while(count < numRows)
+            {
+              word += mat[x][y];
+              fout<< word<< "\n";
+              x++;
+              y--;
+              count++;
+              if(x == numRows)
+                x = 0;
+              if(y == -1)
+                y = numCols;
+            }
+            break;*/
+
+        }
       }
     }
   }

@@ -22,6 +22,7 @@ class dictionary
 
   private:
     vector <string> words;
+    vector <string> sorted;
     grid g;
     int length;
 };
@@ -40,8 +41,8 @@ dictionary::dictionary()
   while(!f_in.eof())
 	{
     f_in>> word;
-    words.push_back(word);
     length++;
+    words.push_back(word);
   }
   f_in.close();
 }
@@ -60,7 +61,6 @@ void dictionary::selectionSort()
 {
   int minIndex;
   string tmp;
-  //int length = numRows * numCols;
 
   ofstream fout;
   string filename = "dictionary-sorted.txt"; //create output file
@@ -73,23 +73,26 @@ void dictionary::selectionSort()
 
   else
   {
-    for( int i = 0; i < length - 1; i++)
+    for( int i = 0; i < words.size() - 1; ++i)
     {
       minIndex = i;
       tmp = words[i];
-      for (int j = i + 1; j < length; j++)
+      for (int j = i + 1; j < words.size(); ++j)
       {
-        if (words[j] < tmp)
-          tmp = words[j];
+        if (words[j] < words[minIndex])
           minIndex = j;
       }
-      words[minIndex] = words[i];
-      words[i] = tmp;
+
+      if(minIndex != i)
+        tmp = words[minIndex];
+        words[minIndex] = words[i];
+        words[i] = tmp;
+
+      //fout<<words[i];
     }
   }
   fout.close();
 }
-
 
 
 int dictionary::binarySearch(string target)
