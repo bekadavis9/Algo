@@ -93,21 +93,21 @@ void dictionary::selectionSort()
       }
 
 
-      //fout<<words[i];
+      fout<< words[i] << "\n";
     }
   }
   fout.close();
 }
 
 
-int dictionary::binarySearch(string target)
+int dictionary::binarySearch(const I& target)
 {
   int i = 0;
   while(i < words.size())
   {
     if(words[i] == target)
     {
-      cout<< "Found: "<< target;
+      cout<< "\nFound: "<< target;
       return i;
     }
     else
@@ -116,5 +116,10 @@ int dictionary::binarySearch(string target)
       continue;
     }
   }
+  
+  int left = 0;
+  int right = (int)words.size()-1;
+  int mid = (left + right)/2;
+  
   return -1;
 }

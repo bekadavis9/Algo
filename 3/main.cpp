@@ -22,11 +22,10 @@ int main()
   g.fill();
   //g.wordGenerator();
 
-
   dictionary d;
-  //d.selectionSort();
-
-  //d.binarySearch("a");
-
+  
+  d.selectionSort();
+  //d.binarySearch();
+  
   return 0;
 }

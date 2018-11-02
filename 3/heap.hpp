@@ -21,7 +21,7 @@ template <typename T>
 class heap
 {
   public:
-		int parent(vector <T> &v);
+	int parent(vector <T> &v);
     int left(vector <T> &v);
     int right(vector <T> &v);
     int getItem(vector <T> &v, int n);
