@@ -140,30 +140,34 @@ void grid::wordGenerator()
 
   else
   {
-  	for(int j = 0; j < numRows; j++)
+  	for(int j = 0; j < numCols; j++)
   	{
       direction = 0;
-    	for(int k = 0; k < numCols; k++)
+    	for(int k = 0; k < numRows; k++)
       {
         count = 0;
         direction++;
 
         switch(direction)
         {
-          case 1:
-            x = j;
+          case 1: x = j;
+          {
             word = "";
             while(count < numRows)
             {
               word += mat[x][k];
               fout<< word<< "\n";
+              fout<<"k:"<<k<<"\n";
+              fout<<"j:"<<j<<"\n";
               x++;
               count++;
               if(x == numRows)
                 x = 0;
             }
             break;
-/*
+          }
+
+
           case 2:
             y = k;
             while(count < numCols)
@@ -269,7 +273,7 @@ void grid::wordGenerator()
               if(y == -1)
                 y = numCols;
             }
-            break;*/
+            break;
 
         }
       }
