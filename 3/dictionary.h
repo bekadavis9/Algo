@@ -20,7 +20,8 @@ class dictionary
     void selectionSort();
     int binarySearch(string target);
     void quickSort();
-    
+    void heapSort();
+
 
   private:
     vector <string> words;
@@ -117,4 +118,15 @@ int dictionary::binarySearch(string target)
     }
   }
   return -1;
+}
+
+void dictionary::quickSort()
+{
+
+}
+
+void dictionary::heapSort()
+{
+  buildMaxHeap(words);
+  maxHeapify(words);
 }

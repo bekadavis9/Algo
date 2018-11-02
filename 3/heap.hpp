@@ -11,7 +11,6 @@ Group ID: DAVPER (24)
 #include <random>
 #include <algorithm>
 #include <math.h>
-#include "grid.h"
 using namespace std;
 
 #ifndef HEAP_H
@@ -77,9 +76,11 @@ int heap::getItem(&v, int n)
   return -1;
 }
 
-void heap::initializeMaxHeap()
+void heap::initializeMaxHeap(&v)
 {
-
+  parent = v.parent();
+  left = v.left();
+  right = v.right();
 }
 
 void heap::maxHeapify(std::vector<string>& v, int n)
