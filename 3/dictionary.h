@@ -19,6 +19,8 @@ class dictionary
     friend ostream& operator<< (ostream &ostr, const vector<string>& words);
     void selectionSort();
     int binarySearch(string target);
+    void quickSort();
+    
 
   private:
     vector <string> words;
@@ -73,20 +75,23 @@ void dictionary::selectionSort()
 
   else
   {
-    for( int i = 0; i < words.size() - 1; ++i)
+    for( int i = 0; i < words.size()-1; ++i)
     {
       minIndex = i;
       tmp = words[i];
       for (int j = i + 1; j < words.size(); ++j)
       {
-        if (words[j] < words[minIndex])
+        if (words[j] <= words[minIndex])
           minIndex = j;
       }
 
       if(minIndex != i)
+      {
         tmp = words[minIndex];
         words[minIndex] = words[i];
         words[i] = tmp;
+      }
+
 
       //fout<<words[i];
     }

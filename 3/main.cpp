@@ -20,10 +20,10 @@ int main()
   g.resize();
   g.makeFile();
   g.fill();
-  g.wordGenerator();
+  //g.wordGenerator();
 
 
-  //dictionary d;
+  dictionary d;
   //d.selectionSort();
 
   //d.binarySearch("a");
