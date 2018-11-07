@@ -163,7 +163,7 @@ void grid::wordGenerator()
                 x = 0;
             }
             break;
-/*
+
           case 2:
             y = k;
             while(count < numCols)
@@ -269,7 +269,7 @@ void grid::wordGenerator()
               if(y == -1)
                 y = numCols;
             }
-            break;*/
+            break;
 
         }
       }

@@ -10,6 +10,7 @@ Group ID: DAVPER (24)
 #include <iostream>
 #include <random>
 #include "grid.h"
+//#include "heap.hpp"
 using namespace std;
 
 class dictionary
@@ -19,7 +20,7 @@ class dictionary
     friend ostream& operator<< (ostream &ostr, const vector<string>& words);
     void selectionSort();
     int binarySearch(string target);
-    void quickSort();
+    void quickSort(vector <string> &words, int left, int right);
     void heapSort();
 
 
@@ -101,14 +102,14 @@ void dictionary::selectionSort()
 }
 
 
-int dictionary::binarySearch(const I& target)
+int dictionary::binarySearch(string target)
 {
   int i = 0;
   while(i < words.size())
   {
     if(words[i] == target)
     {
-      cout<< "\nFound: "<< target;
+      cout<< "\nFound: "<< i;
       return i;
     }
     else
@@ -117,21 +118,57 @@ int dictionary::binarySearch(const I& target)
       continue;
     }
   }
-  
+
   int left = 0;
   int right = (int)words.size()-1;
   int mid = (left + right)/2;
-  
+
   return -1;
 }
 
-void dictionary::quickSort()
+void dictionary::quickSort(vector <string> &words, int left, int right)
 {
+  int j, k;
+  int i = 0;
+  string tmp;
+  left = 0;
+  right = words.size();
+  int midpoint = left + (right-left) /2;
+  string pivot = words[midpoint];
 
+  while(j<right || k>right)
+  {
+    while(words[j] < pivot)
+    {
+      j++;
+    }
+    while(words[k] > pivot)
+    {
+      k--;
+    }
+    if(j <= k)
+    {
+      tmp = words[j];
+      words[j] = words[k];
+      words[k] = tmp;
+
+      j++;
+      k--;
+    }
+    else
+    {
+      if(j < right)
+        quickSort(words, j, right);
+      if(k > left)
+        quickSort(words, left, k);
+    }
+  }
 }
 
+/*
 void dictionary::heapSort()
 {
-  buildMaxHeap(words);
+  initializeMaxHeap(words);
   maxHeapify(words);
 }
+*/

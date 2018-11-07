@@ -30,7 +30,7 @@ class heap
     void heapSort();
 
   private:
-    vector <T> v;
+    vector <string> words;
     int length;
     int parent;
     int left;
@@ -78,9 +78,24 @@ int heap::getItem(&v, int n)
 
 void heap::initializeMaxHeap(&v)
 {
-  parent = v.parent();
-  left = v.left();
-  right = v.right();
+  string word;
+  int length = 0;
+  ifstream f_in;
+	string filename = "dictionary.txt";
+	f_in.open(filename.c_str());
+
+  if (!f_in)
+		cout<<"ERROR: could not open file."<<endl;
+
+  while(!f_in.eof())
+	{
+    f_in>> word;
+    length++;
+    words.push_back(word);
+  }
+  f_in.close();
+
+  buildMaxHeap(words);
 }
 
 void heap::maxHeapify(std::vector<string>& v, int n)

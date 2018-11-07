@@ -20,12 +20,11 @@ int main()
   g.resize();
   g.makeFile();
   g.fill();
-  //g.wordGenerator();
 
   dictionary d;
-  
+
   d.selectionSort();
-  //d.binarySearch();
-  
+  d.binarySearch("melodrama");
+
   return 0;
 }
