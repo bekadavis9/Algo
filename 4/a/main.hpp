@@ -1,4 +1,10 @@
-// Declarations and functions for project #4
+/*
+Algorithms 11/5/18
+Project #4 board.h file
+Word Search
+Rebekah Davis and Julian Perez
+Group ID: DAVPER (24)
+*/
 
 #include <iostream>
 #include <limits.h>
@@ -38,6 +44,9 @@ class board
         //add 1 to int one, two,...nine each time its used
         //check that int against 9 to see if digit fully used
         //if it has, add to array
+      vector <int> Conflicts(board b);
+
+
 
    private:
 
@@ -45,6 +54,7 @@ class board
       // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
 
       matrix<ValueType> value;
+      matrix <vector<bool>> conflicts(int n, int m);
 };
 
 board::board(int sqSize)
@@ -67,9 +77,9 @@ void board::clear()
 void board::initialize(ifstream &fin)
 // Read a Sudoku board from the input file.
 {
-  ifstream fin;
-  string filename = "sudoku1.txt"; //create output file
-  fin.open(filename.c_str());
+  //ifstream fin;
+  //string filename = "sudoku1.txt"; //create output file
+  //fin.open(filename.c_str());
   char ch;
 
   clear();
@@ -160,37 +170,30 @@ void board::DigitsUsed(int digit, array arr)
   //check that int against 9 to see if digit fully used
   //if it has, add to array
   {
-    
+
   }
 
-int main()
+vector <int> board::Conflicts(board b)
+//look for Conflicts
+//print them out
+//move to next spot on board
 {
-   ifstream fin;
+  //move through board starting at 0,0
+  //for each digit, add to conflicts matrix
+  //move to next digit
 
-   // Read the sample grid from the file.
-   string fileName = "sudoku.txt";
-
-   fin.open(fileName.c_str());
-   if (!fin)
-   {
-      cerr << "Cannot open " << fileName << endl;
-      exit(1);
-   }
-
-   try
-   {
-      board b1(SquareSize);
-
-      while (fin && fin.peek() != 'Z')
+  for(int a = 0; a < numCols; a++)
+  {
+    for(int b = 0; b < numRows; b++)
+    {
+      for(int c = 0; c < numSquare; c++)
       {
-	 b1.initialize(fin);
-	 b1.print();
-	 b1.printConflicts();
+        for(int d = 0; d < numDigits; d++)
+        {
+          //if board[i][j][k] == -1
+          //go to next spot -> only cols changes unless @ last place
+        }
       }
-   }
-   catch  (indexRangeError &ex)
-   {
-      cout << ex.what() << endl;
-      exit(1);
-   }
+    }
+  }
 }
