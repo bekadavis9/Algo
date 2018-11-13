@@ -36,25 +36,29 @@ class board
    public:
       board(int);
       void clear();
+      void setCell(int row, int col, int digit);
       void initialize(ifstream &fin);
       void print();
       bool isBlank(int, int);
       ValueType getCell(int, int);
-      void DigitsUsed(int digit, array arr);
-        //add 1 to int one, two,...nine each time its used
-        //check that int against 9 to see if digit fully used
-        //if it has, add to array
+      void DigitsInRow(int digit, int row);
+      void DigitsInCol(int digit, int col);
+      void DigitsInSquare(int digit, int row, int col);
+      void selectionSort(int[]arr);
       vector <int> Conflicts(board b);
 
 
 
    private:
-
-      // The following matrices go from 1 to BoardSize in each
-      // dimension, i.e., they are each (BoardSize+1) * (BoardSize+1)
-
       matrix<ValueType> value;
-      matrix <vector<bool>> conflicts(int n, int m);
+      int numRows = 9;
+      int numCols = 9;
+      int numSquares = 9;
+      int numDigits = 9;
+      matrix <vector<bool> > conflicts(int numRows, int numCols);
+      int rowDigits[9];
+      int colDigits[9];
+      int sqDigits[9];
 };
 
 board::board(int sqSize)
@@ -78,21 +82,29 @@ void board::initialize(ifstream &fin)
 // Read a Sudoku board from the input file.
 {
   //ifstream fin;
-  //string filename = "sudoku1.txt"; //create output file
+  //string filename = "sudoku1.txt"; //create input file
   //fin.open(filename.c_str());
   char ch;
 
   clear();
+  while(!fin.eof())
+  {
+    for (int i = 1; i <= BoardSize; i++)
+      for (int j = 1; j <= BoardSize; j++)
+      {
+         fin >> ch;
 
-  for (int i = 1; i <= BoardSize; i++)
-    for (int j = 1; j <= BoardSize; j++)
-    {
-       fin >> ch;
+          // If the read char is not Blank
+        if (ch != '.')
+             setCell(i,j,ch-'0');   // Convert char to int
+        }
+  }
+  fin.close();
+}
 
-        // If the read char is not Blank
-      if (ch != '.')
-           setCell(i,j,ch-'0');   // Convert char to int
-      }
+void board::setCell(int row, int col, int digit)
+{
+  value[row][col] = digit;
 }
 
 int squareNumber(int i, int j)
@@ -165,35 +177,203 @@ void board::print()
    cout << endl;
 }
 
-void board::DigitsUsed(int digit, array arr)
-  //add 1 to int one, two,...nine each time its used
-  //check that int against 9 to see if digit fully used
-  //if it has, add to array
+void board::DigitsInRow(int row)
+{
+  for(int i = 0; i < 9; i++)
   {
-
+    rowDigits[i] = 0;
   }
+
+  for(int j = 1; j<= numCols; j++)
+  {
+    if(isBlank(row, j))
+      continue;
+    else
+    rowDigits[j-1] = getCell(row,j);  //place each number from the row into arr
+  }
+  selectionSort(rowDigits);
+}
+
+void board::DigitsInCol(int col)
+{
+  for(int i = 0; i < 9; i++)
+  {
+    colDigits[i] = 0;
+  }
+
+  for(int i = 1; i <= numRows; i++)
+  {
+    if(isBlank(i,col))
+      continue;
+    else
+    colDigits[i-1] = getCell(i,col);  //place each number from the row into arr
+  }
+  selectionSort(colDigits);
+}
+
+void board::DigitsInSquare(int row, int col)
+//add 1 to int one, two,...nine each time its used
+//check that int against 9 to see if digit fully used
+//if it has, add to array
+{
+  int sq = squareNumber(row, col);
+  int r, c = 0;
+
+  switch(sq)  //reset cell to beginning of square
+  {
+    case 1:
+      r = 1;
+      c = 1;
+      break;
+    case 2:
+      r = 1;
+      c = 4;
+      break;
+    case 3:
+      r = 1;
+      c = 7;
+      break;
+    case 4:
+      r = 4;
+      c = 1;
+      break;
+    case 5:
+      r = 4;
+      c = 4;
+      break;
+    case 6:
+      r = 4;
+      c = 7;
+      break;
+    case 7:
+      r = 7;
+      c = 1;
+      break;
+    case 8:
+      r = 7;
+      c = 4;
+      break;
+    case 9:
+      r = 7;
+      c = 7;
+      break;
+    }
+
+    for(int i = 0; i < 9; i++)
+    {
+      sqDigits[i] = 0;
+    }
+
+    for(int i = 1; i <= r + 2; i++) //stay in row of square
+    {
+      for(int j = 1; j <= c+2; j++)   //stay in col of square
+      {
+        if(isBlank(i,col))
+          continue;
+        else
+        sqDigits[j1] = getCell(i,col);  //place each number from the row into arr
+      }
+    }
+  selectionSort(sqDigits);
+}
+
+
+void board::selectionSort(int[]arr)
+{
+  int minIndex;
+  string tmp;
+  for( int i = 0; i < arr.length()-1; ++i)
+  {
+    minIndex = i;
+    tmp = arr[i];
+    for (int j = i + 1; j < arr.length(); ++j)
+    {
+      if (arr[j] <= arr[minIndex])
+        minIndex = j;
+    }
+
+    if(minIndex != i)
+    {
+      tmp = arr[minIndex];
+      arr[minIndex] = arr[i];
+      arr[i] = tmp;
+    }
+  }
+}
+
 
 vector <int> board::Conflicts(board b)
 //look for Conflicts
 //print them out
 //move to next spot on board
 {
-  //move through board starting at 0,0
-  //for each digit, add to conflicts matrix
-  //move to next digit
-
-  for(int a = 0; a < numCols; a++)
+  int sq;
+  for(int i = 1; i <= numRows; i++)
   {
-    for(int b = 0; b < numRows; b++)
+    for(int j = 1; j <= numCols; j++)
     {
-      for(int c = 0; c < numSquare; c++)
+      rowDigits = DigitsInRow(i);
+      colDigits = DigitsInCol(j);
+      sqDigits = DigitsInSquare(i, j);
+      for(int k = 1; k <= numDigits; k++)
       {
-        for(int d = 0; d < numDigits; d++)
+        int count = 0;
+        //check for each digit in each array
+        //if it is there, count++
+        //if count > 1, conflicts[i][j] = T
+      }
+    }
+  }
+
+
+/*
+  int sq;
+  int counter = 1;
+  int i = 1;
+
+
+  while(counter <= BoardSize)
+  {
+    int col = 1;
+    int row = 1;
+    int arr[9];
+
+    while(i < numRows)
+    {
+      for(int j = 1; j <= numCols; j++)
+      {
+        arr[j-1] = getCell(i, j);
+        for(h = 1; h <= numRows; h++)
         {
+          int cell = getCell(h, j);
+          if(arr[h-1] == cell)
+        }
+
+
+        for(int k = 1; k <= numDigits; k++)
+        {
+          conflicts[i][j].resize(9);
+          switch(getCell(i,j))
+          case: i = 1; j = 1;
+
+
+          sq = squareNumber(i,j);
+
+
+
           //if board[i][j][k] == -1
           //go to next spot -> only cols changes unless @ last place
+            //if Numcol = 9 -> 0 and row++, numcol = 3, 6 -> square ++
+
+          if (numCols == 9)
+          {
+            numCols = 0;
+            numRows ++;
+          }
+
         }
       }
     }
   }
+  */
 }
