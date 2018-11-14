@@ -19,7 +19,7 @@ using namespace std;
 typedef int ValueType; // The type of the value in a cell
 const int Blank = -1;  // Indicates that a cell is blank
 
-const int SquareSize = 9;  //  The number of cells in a small square
+const int SquareSize = 3;  //  The number of cells in a small square
                            //  (usually 3).  The board has
                            //  SquareSize^2 rows and SquareSize^2
                            //  columns.
@@ -80,21 +80,15 @@ void board::initialize(ifstream &fin)
 // Read a Sudoku board from the input file.
 {
   char ch;
-
   clear();
-  while(!fin.eof())
-  {
-    for (int i = 1; i <= BoardSize; i++)
-      for (int j = 1; j <= BoardSize; j++)
-      {
-         fin >> ch;
-
-          // If the read char is not Blank
-        if (ch != '.')
-             setCell(i,j,ch-'0');   // Convert char to int
-        }
-  }
-  fin.close();
+  for (int i = 1; i <= BoardSize; i++)
+    for (int j = 1; j <= BoardSize; j++)
+    {
+      fin >> ch;
+        // If the read char is not Blank
+      if (ch != '.')
+           setCell(i,j,ch-'0');   // Convert char to int
+    }
 }
 
 void board::setCell(int row, int col, int digit)
@@ -296,7 +290,7 @@ void board::printConflicts()
           else
             conflicts[i][j][x] = false;
 
-          cout<<conflicts[i][j][x];
+          //cout<<conflicts[i][j][x];
         }
       }
     }

@@ -39,9 +39,9 @@ int main()
 
       while (fin && fin.peek() != 'Z')
       {
-	 b1.initialize(fin);
-	 b1.print();
-	 b1.printConflicts();
+      	 b1.initialize(fin);
+      	 b1.print();
+      	 b1.printConflicts();
       }
    }
    catch  (indexRangeError &ex)
@@ -49,4 +49,6 @@ int main()
       cout << ex.what() << endl;
       exit(1);
    }
+
+   return 0;
 }
