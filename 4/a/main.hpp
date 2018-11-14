@@ -159,9 +159,9 @@ void board::print()
 			for (int j = 1; j <= BoardSize; j++)
 			{
 	    		cout << "---";
-         		cout << "-";
          	}
-	 		cout << endl;
+	 		cout << "-";
+			cout << endl;
     	}
 	for (int j = 1; j <= BoardSize; j++)
     {
@@ -306,34 +306,50 @@ void board::printConflicts()
 //print them out
 //move to next spot on board
 {
-  matrix <vector<bool> > conflicts(numRows, numCols);
-  for(int i = 1; i <= numRows; i++)
-  {
-    for(int j = 1; j <= numCols; j++)
-    {
-      DigitsInRow(i);
-      DigitsInCol(j);
-      DigitsInSquare(i, j);
-      for(int k = 1; k <= numDigits; k++)
-      {
-        int count = 0;
-        for(int x = 0; x < 9; x++)
-        {
-          if(rowDigits[x] == k)
-            count++;
-          if(colDigits[x] == k)
-            count++;
-          if(sqDigits[x] == k)
-            count++;
+	matrix <vector<bool> > conflicts(numRows, numCols);
+	for(int i = 1; i <= numRows; i++)
+	{
+		for(int j = 1; j <= numCols; j++)
+    	{
+      		DigitsInRow(i);
+      		DigitsInCol(j);
+      		DigitsInSquare(i, j);
+      		for(int k = 1; k <= numDigits; k++)
+      		{
+        		int count = 0;
+        		for(int x = 0; x < 9; x++)
+        		{
+          			if(rowDigits[x] == k)
+          			{
+            			count++;
+            		}
+              
+          			if(colDigits[x] == k)
+          			{
+            			count++;
+          			}
+          
+		  			if(sqDigits[x] == k)
+          			{
+            			count++;
+          			}
+          	
+          		}
+		  			if(count>1)
+          			{
+            			conflicts[i][j][x] = true;
+          			}
+          			
+					else
+          			{
+            			conflicts[i][j][x] = false;
+          			}
 
-          if(count>1)
-            conflicts[i][j][x] = true;
-          else
-            conflicts[i][j][x] = false;
-
-          //cout<<conflicts[i][j][x];
-        }
-      }
-    }
-  }
+          			cout<< "Row Conflicts: " << conflicts[i] << "\n";
+          			cout<< "Column Conflicts: " << conflicts[j] << "\n";
+          			cout<< "Square Conflicts: " << conflicts[x] << "\n";
+        		//}
+      		}
+    	}
+  	}
 }
