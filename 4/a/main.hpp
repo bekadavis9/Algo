@@ -12,6 +12,7 @@ Group ID: DAVPER (24)
 #include "d_except.h"
 #include <list>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -44,7 +45,7 @@ class board
       void DigitsInRow(int row);
       void DigitsInCol(int col);
       void DigitsInSquare(int row, int col);
-      void printConflicts(board b, matrix <vector<bool> > *conflicts);
+      void printConflicts();
 
    private:
       matrix<ValueType> value;
@@ -52,7 +53,7 @@ class board
       int numCols = 9;
       int numSquares = 9;
       int numDigits = 9;
-      matrix <vector<bool> > conflicts(int numRows, int numCols);
+      //matrix <vector<bool> > *conflicts(int numRows, int numCols);
       int rowDigits[9];
       int colDigits[9];
       int sqDigits[9];
@@ -265,11 +266,12 @@ void board::DigitsInSquare(int row, int col)
     }
 }
 
-void board::printConflicts(board b, matrix <vector<bool> > *conflicts)
+void board::printConflicts()
 //look for Conflicts
 //print them out
 //move to next spot on board
 {
+  matrix <vector<bool> > conflicts(numRows, numCols);
   for(int i = 1; i <= numRows; i++)
   {
     for(int j = 1; j <= numCols; j++)
@@ -290,11 +292,11 @@ void board::printConflicts(board b, matrix <vector<bool> > *conflicts)
             count++;
 
           if(count>1)
-            conflicts[i][j] = 1;
+            conflicts[i][j][x] = true;
           else
-            conflicts[i][j] = 0;
+            conflicts[i][j][x] = false;
 
-          cout<<conflicts[i][j];
+          cout<<conflicts[i][j][x];
         }
       }
     }
