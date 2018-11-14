@@ -45,7 +45,7 @@ class board
       void DigitsInRow(int row);
       void DigitsInCol(int col);
       void DigitsInSquare(int row, int col);
-      matrix <vector <bool> > printConflicts();
+      void printConflicts();
 
    private:
       matrix<ValueType> value;
@@ -53,7 +53,7 @@ class board
       int numCols = 9;
       int numSquares = 9;
       int numDigits = 9;
-      matrix <vector<bool> > conflicts(int numRows, int numCols);
+      //matrix <vector<bool> > *conflicts(int numRows, int numCols);
       int rowDigits[9];
       int colDigits[9];
       int sqDigits[9];
@@ -268,7 +268,7 @@ void board::DigitsInSquare(int row, int col)
     }
 }
 
-matrix <vector <bool> > board::printConflicts()
+void board::printConflicts()
 //look for Conflicts
 //print them out
 //move to next spot on board
@@ -298,10 +298,9 @@ matrix <vector <bool> > board::printConflicts()
           else
             conflicts[i][j][x] = false;
 
-          cout<<conflicts[i][j][x];
+          //cout<<conflicts[i][j][x];
         }
       }
     }
   }
-  return conflicts;
 }
