@@ -41,13 +41,10 @@ class board
       void print();
       bool isBlank(int, int);
       ValueType getCell(int, int);
-      void DigitsInRow(int digit, int row);
-      void DigitsInCol(int digit, int col);
-      void DigitsInSquare(int digit, int row, int col);
-      void selectionSort(int[]arr);
-      vector <int> Conflicts(board b);
-
-
+      void DigitsInRow(int row);
+      void DigitsInCol(int col);
+      void DigitsInSquare(int row, int col);
+      void printConflicts(board b, matrix <vector<bool> > *conflicts);
 
    private:
       matrix<ValueType> value;
@@ -81,9 +78,6 @@ void board::clear()
 void board::initialize(ifstream &fin)
 // Read a Sudoku board from the input file.
 {
-  //ifstream fin;
-  //string filename = "sudoku1.txt"; //create input file
-  //fin.open(filename.c_str());
   char ch;
 
   clear();
@@ -191,7 +185,6 @@ void board::DigitsInRow(int row)
     else
     rowDigits[j-1] = getCell(row,j);  //place each number from the row into arr
   }
-  selectionSort(rowDigits);
 }
 
 void board::DigitsInCol(int col)
@@ -208,13 +201,9 @@ void board::DigitsInCol(int col)
     else
     colDigits[i-1] = getCell(i,col);  //place each number from the row into arr
   }
-  selectionSort(colDigits);
 }
 
 void board::DigitsInSquare(int row, int col)
-//add 1 to int one, two,...nine each time its used
-//check that int against 9 to see if digit fully used
-//if it has, add to array
 {
   int sq = squareNumber(row, col);
   int r, c = 0;
@@ -271,109 +260,43 @@ void board::DigitsInSquare(int row, int col)
         if(isBlank(i,col))
           continue;
         else
-        sqDigits[j1] = getCell(i,col);  //place each number from the row into arr
+        sqDigits[j] = getCell(i,col);  //place each number from the row into arr
       }
     }
-  selectionSort(sqDigits);
 }
 
-
-void board::selectionSort(int[]arr)
-{
-  int minIndex;
-  string tmp;
-  for( int i = 0; i < arr.length()-1; ++i)
-  {
-    minIndex = i;
-    tmp = arr[i];
-    for (int j = i + 1; j < arr.length(); ++j)
-    {
-      if (arr[j] <= arr[minIndex])
-        minIndex = j;
-    }
-
-    if(minIndex != i)
-    {
-      tmp = arr[minIndex];
-      arr[minIndex] = arr[i];
-      arr[i] = tmp;
-    }
-  }
-}
-
-
-vector <int> board::Conflicts(board b)
+void board::printConflicts(board b, matrix <vector<bool> > *conflicts)
 //look for Conflicts
 //print them out
 //move to next spot on board
 {
-  int sq;
   for(int i = 1; i <= numRows; i++)
   {
     for(int j = 1; j <= numCols; j++)
     {
-      rowDigits = DigitsInRow(i);
-      colDigits = DigitsInCol(j);
-      sqDigits = DigitsInSquare(i, j);
+      DigitsInRow(i);
+      DigitsInCol(j);
+      DigitsInSquare(i, j);
       for(int k = 1; k <= numDigits; k++)
       {
         int count = 0;
-        //check for each digit in each array
-        //if it is there, count++
-        //if count > 1, conflicts[i][j] = T
-      }
-    }
-  }
-
-
-/*
-  int sq;
-  int counter = 1;
-  int i = 1;
-
-
-  while(counter <= BoardSize)
-  {
-    int col = 1;
-    int row = 1;
-    int arr[9];
-
-    while(i < numRows)
-    {
-      for(int j = 1; j <= numCols; j++)
-      {
-        arr[j-1] = getCell(i, j);
-        for(h = 1; h <= numRows; h++)
+        for(int x = 0; x < 9; x++)
         {
-          int cell = getCell(h, j);
-          if(arr[h-1] == cell)
-        }
+          if(rowDigits[x] == k)
+            count++;
+          if(colDigits[x] == k)
+            count++;
+          if(sqDigits[x] == k)
+            count++;
 
+          if(count>1)
+            conflicts[i][j] = 1;
+          else
+            conflicts[i][j] = 0;
 
-        for(int k = 1; k <= numDigits; k++)
-        {
-          conflicts[i][j].resize(9);
-          switch(getCell(i,j))
-          case: i = 1; j = 1;
-
-
-          sq = squareNumber(i,j);
-
-
-
-          //if board[i][j][k] == -1
-          //go to next spot -> only cols changes unless @ last place
-            //if Numcol = 9 -> 0 and row++, numcol = 3, 6 -> square ++
-
-          if (numCols == 9)
-          {
-            numCols = 0;
-            numRows ++;
-          }
-
+          cout<<conflicts[i][j];
         }
       }
     }
   }
-  */
 }
