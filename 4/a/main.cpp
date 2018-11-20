@@ -6,18 +6,12 @@ Rebekah Davis and Julian Perez
 Group ID: DAVPER (24)
 */
 
-/*
 #include <iostream>
 #include <limits.h>
-#include "d_matrix.h"
-#include "d_except.h"
 #include <list>
 #include <fstream>
-*/
 #include "main.hpp"
-
 using namespace std;
-
 
 int main()
 {
@@ -42,6 +36,8 @@ int main()
       	 b1.initialize(fin);
       	 b1.print();
       	 b1.printConflicts();
+         //b1.DigitsInSquare(1,4);  //(row, col)
+         cout<<"\n";
       }
    }
    catch  (indexRangeError &ex)

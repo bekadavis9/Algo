@@ -49,11 +49,7 @@ class board
 
    private:
       matrix<ValueType> value;
-      int numRows = 9;
-      int numCols = 9;
-      int numSquares = 9;
-      int numDigits = 9;
-      matrix <vector<bool> > conflicts(int numRows, int numCols);
+      //matrix <vector<bool> > conflicts(int numRows, int numCols);
       int rowDigits[9];
       int colDigits[9];
       int sqDigits[9];
@@ -116,6 +112,7 @@ ostream &operator<<(ostream &ostr, vector<int> &v)
       ostr << v[i] << " ";
    }
    cout << endl;
+   return ostr;
 }
 
 ValueType board::getCell(int i, int j)
@@ -181,35 +178,42 @@ void board::DigitsInRow(int row)
     rowDigits[i] = 0;
   }
 
-  for(int j = 1; j<= numCols; j++)
+  for(int j = 1; j<= 9; j++)  //traverse through columns
   {
     if(isBlank(row, j))
       continue;
     else
       rowDigits[j-1] = getCell(row,j);  //place each number from the row into arr
   }
+/*
+  for(int i = 0; i < 9; i++)
+  {
+    cout<<rowDigits[i];
+  }
+  */
 }
 
 void board::DigitsInCol(int col)
 {
-  for(int i = 0; i < 9; i++)
-  {
-    colDigits[i] = 0;
-  }
-
-  for(int i = 1; i <= numRows; i++)
+  for(int i = 1; i <= 9; i++)   //traverse through rows
   {
     if(isBlank(i,col))
       continue;
     else
     colDigits[i-1] = getCell(i,col);  //place each number from the row into arr
   }
+/*
+  for(int i = 0; i < 9; i++)
+  {
+    cout<<colDigits[i];
+  }*/
 }
 
 void board::DigitsInSquare(int row, int col)
 {
   int sq = squareNumber(row, col);
   int r, c = 0;
+  int count = 0;
 
   switch(sq)  //reset cell to beginning of square
   {
@@ -251,56 +255,72 @@ void board::DigitsInSquare(int row, int col)
       break;
     }
 
-    for(int i = 0; i < 9; i++)
+    for(int i = r; i <= r + 2; i++) //stay in row of square
     {
-      sqDigits[i] = 0;
-    }
-
-    for(int i = 1; i <= r + 2; i++) //stay in row of square
-    {
-      for(int j = 1; j <= c+2; j++)   //stay in col of square
+      for(int j = c; j <= c+2; j++)   //stay in col of square
       {
-        if(isBlank(i,col))
+        count++;          //ensure arry is in correct order
+        if(isBlank(i,j))
           continue;
         else
-        sqDigits[j] = getCell(i,col);  //place each number from the row into arr
+          sqDigits[count-1] = getCell(i,j);  //place each number from the row into arr
       }
     }
 }
 
+//void board::printConflicts()
 matrix <vector <bool> > board::printConflicts()
-//look for Conflicts
-//print them out
-//move to next spot on board
 {
-  matrix <vector<bool> > conflicts(numRows, numCols);
-  for(int i = 1; i <= numRows; i++)
+  matrix <vector<bool> > conflicts(9, 9);
+  int count;
+  bool result;
+/*
+  for(int i = 0; i<temp.size(); i++)
   {
-    for(int j = 1; j <= numCols; j++)
+    if(i%2 == 0)
+      temp[i] = true;
+    cout<<temp[i];
+  }
+
+  conflicts[0][0] = temp;
+  //cout<<conflicts[0][0];
+  */
+
+
+  for(int i = 1; i <= 9; i++)//rows
+  {
+    for(int j = 1; j <= 9; j++)//cols
     {
       DigitsInRow(i);
       DigitsInCol(j);
       DigitsInSquare(i, j);
-      for(int k = 1; k <= numDigits; k++)
+      for(int k = 1; k <= 9; k++)//digits
       {
-        int count = 0;
-        for(int x = 0; x < 9; x++)
+        count = 0;
+        for(int x = 0; x < 9; x++)//numbers
         {
-          if(rowDigits[x] == k)
+          conflicts[i][j].resize(9);
+          if(rowDigits[x] == k)   //row
             count++;
-          if(colDigits[x] == k)
+          if(colDigits[x] == k)   //col
             count++;
-          if(sqDigits[x] == k)
+          if(sqDigits[x] == k)  //square
             count++;
 
-          if(count>1)
-            conflicts[i][j][x] = true;
+          if(count>=1)
+            result = true;
+
           else
-            conflicts[i][j][x] = false;
+            result = false;
 
-          cout<<conflicts[i][j][x];
+          conflicts[i][j].push_back(result);
+
+            //temp[x] = false;
+
+          //cout<<conflicts[i][j][x];
         }
       }
+
     }
   }
   return conflicts;
