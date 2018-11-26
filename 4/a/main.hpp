@@ -47,12 +47,20 @@ class board
       void DigitsInSquare(int row, int col);
       matrix <vector <bool> > printConflicts();
 
+
+      bool UsedInRow(int row, int num);
+      bool UsedInCol(int col, int num);
+      bool UsedInSquare(int row, int col, int num);
+
    private:
       matrix<ValueType> value;
       //matrix <vector<bool> > conflicts(int numRows, int numCols);
       int rowDigits[9];
       int colDigits[9];
       int sqDigits[9];
+      int numRows;
+      int numCols;
+      int numDigits;
 };
 
 board::board(int sqSize)
@@ -60,6 +68,9 @@ board::board(int sqSize)
 // Board constructor
 {
    clear();
+   numRows = sqSize;
+   numCols = sqSize;
+   numDigits = 9;
 }
 
 void board::clear()
@@ -185,12 +196,6 @@ void board::DigitsInRow(int row)
     else
       rowDigits[j-1] = getCell(row,j);  //place each number from the row into arr
   }
-/*
-  for(int i = 0; i < 9; i++)
-  {
-    cout<<rowDigits[i];
-  }
-  */
 }
 
 void board::DigitsInCol(int col)
@@ -202,11 +207,6 @@ void board::DigitsInCol(int col)
     else
     colDigits[i-1] = getCell(i,col);  //place each number from the row into arr
   }
-/*
-  for(int i = 0; i < 9; i++)
-  {
-    cout<<colDigits[i];
-  }*/
 }
 
 void board::DigitsInSquare(int row, int col)
@@ -268,60 +268,72 @@ void board::DigitsInSquare(int row, int col)
     }
 }
 
-//void board::printConflicts()
+bool board::UsedInRow(int row, int num)
+{
+  DigitsInRow(row);
+  for(int i  = 0; i < numRows; i++)
+  {
+    if(rowDigits[i] == num)
+      return true;
+  }
+  return false;
+}
+
+bool board::UsedInCol(int col, int num)
+{
+  DigitsInCol(col);
+  for(int i  = 0; i < numCols; i++)
+  {
+    if(colDigits[i] == num)
+      return true;
+  }
+  return false;
+}
+
+bool board::UsedInSquare(int row, int col, int num)
+{
+  DigitsInSquare(row, col);
+  for(int i  = 0; i < numRows; i++)
+  {
+    if(sqDigits[i] == num)
+      return true;
+  }
+  return false;
+}
+
+
 matrix <vector <bool> > board::printConflicts()
 {
+  vector <bool> temp;
   matrix <vector<bool> > conflicts(9, 9);
-  int count;
-  bool result;
-/*
-  for(int i = 0; i<temp.size(); i++)
-  {
-    if(i%2 == 0)
-      temp[i] = true;
-    cout<<temp[i];
-  }
-
-  conflicts[0][0] = temp;
-  //cout<<conflicts[0][0];
-  */
-
-
+  bool r, c, s;
   for(int i = 1; i <= 9; i++)//rows
   {
     for(int j = 1; j <= 9; j++)//cols
     {
-      DigitsInRow(i);
-      DigitsInCol(j);
-      DigitsInSquare(i, j);
       for(int k = 1; k <= 9; k++)//digits
       {
-        count = 0;
-        for(int x = 0; x < 9; x++)//numbers
-        {
-          conflicts[i][j].resize(9);
-          if(rowDigits[x] == k)   //row
-            count++;
-          if(colDigits[x] == k)   //col
-            count++;
-          if(sqDigits[x] == k)  //square
-            count++;
+        r = UsedInRow(i, k);
+        c = UsedInCol(j, k);
+        s = UsedInSquare(i, j, k);
 
-          if(count>=1)
-            result = true;
+        if(r || c || s)
+          temp.push_back(true);
+        else
+          temp.push_back(false);
 
-          else
-            result = false;
+        //cout<<"\n\n\n";
+        //cout<<"row:" <<i<< "   col: "<<j<<"\n\n";
 
-          conflicts[i][j].push_back(result);
-
-            //temp[x] = false;
-
-          //cout<<conflicts[i][j][x];
-        }
       }
-
+      for (int h = 0; h < temp.size(); h++)
+      {
+        conflicts[i][j].push_back(temp[h]);
+        //cout<<temp[h];
+      }
+      temp.clear();
     }
   }
-  return conflicts;
+  //return conflicts;
+  return 0;
 }
