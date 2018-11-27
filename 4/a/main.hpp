@@ -54,6 +54,7 @@ class board
       ValueType firstEmptyCell();
       void solve(board b);
       void recursions();
+      ValueType shortestPath(int row, int col);
 
 
    private:
@@ -68,6 +69,7 @@ class board
       int count;
       int row;
       int col;
+      int max;
 };
 
 board::board(int sqSize)
@@ -79,6 +81,7 @@ board::board(int sqSize)
    numCols = sqSize;
    numDigits = 9;
    count = 0;
+   max = 0;
 }
 
 void board::clear()
@@ -411,4 +414,37 @@ void board::solve(board b)
 void board::recursions()
 {
   cout<<"\n\n\nTotal # of recursions: "<< count;
+}
+
+ValueType board::shortestPath(int row, int col)
+{
+  int used[] = {0,0,0,0,0,0,0,0,0};
+  int counter;
+  int y;
+  ValueType shortest;
+
+  for(int k = 1; k <= 9; k++)
+  {
+    if(UsedInRow(row, k) || UsedInCol(col, k) || UsedInSquare(row, col, k))
+      used[k-1] = k;
+  }
+
+  for(int x = 0; x < 9; x++)
+  {
+    if(used[x] != 0)
+      counter ++;
+  }
+  for(int i = 1; i <=9; i++)
+  {
+    for(int j = 2; j <=9; j++)
+    {
+      shortestPath(i, j);
+      if(counter > max)
+      {
+        max = counter;
+        shortest = getCell(i, j);
+      }
+    }
+  }
+return shortest;
 }

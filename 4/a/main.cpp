@@ -35,10 +35,11 @@ int main()
       {
       	 b1.initialize(fin);
       	 b1.print();
+         b1.shortestPath(1,1);
 
 
-         b1.solve(b1);
-         b1.recursions();
+         //b1.solve(b1);
+         //b1.recursions();
 
          cout<<"\n";
       }
