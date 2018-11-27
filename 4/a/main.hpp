@@ -30,7 +30,6 @@ const int MinValue = 1;
 const int MaxValue = 9;
 
 int numSolutions = 0;
-//int count = 0;
 
 class board
 // Stores the entire Sudoku board
@@ -52,6 +51,7 @@ class board
       bool UsedInRow(int row, int num);
       bool UsedInCol(int col, int num);
       bool UsedInSquare(int row, int col, int num);
+      ValueType firstEmptyCell();
       void solve(board b);
 
 
@@ -64,7 +64,9 @@ class board
       int numRows;
       int numCols;
       int numDigits;
-      int count = 0;
+      int count;
+      int row;
+      int col;
 };
 
 board::board(int sqSize)
@@ -75,6 +77,7 @@ board::board(int sqSize)
    numRows = sqSize;
    numCols = sqSize;
    numDigits = 9;
+   count = 0;
 }
 
 void board::clear()
@@ -332,37 +335,57 @@ matrix <vector <bool> > board::printConflicts()
   return conflicts;
 }
 
+ValueType board::firstEmptyCell()
+{
+  for(int i = 1; i <= 9; i++) //rows
+  {
+    for(int j = 1; j <= 9; j++) //cols
+    {
+      if (isBlank(i, j) || getCell(i, j) == 'Z')
+      {
+        row = i;
+        col = j;
+        return getCell(i, j);
+      }
+      else
+        continue;
+    }
+  }
+}
+
 
 void board::solve(board b)
 {
   count ++;
-  int i, j = 1;
-  while(i <= 9) //rows
+  if(firstEmptyCell() == 'Z')
   {
-    while(j <= 9)//cols
-    {
-      if (isBlank(i, j))
-        break;
-      else if(getCell(i, j) == 'Z')
-      {
-        cout<<"Board is solved!\n";
-        b.print();
-        //exit;
-      }
-      j++;
-    }
-    i++;
+    cout<<"Board is solved!\n";
+    b.print();
+    exit(EXIT_FAILURE);
   }
-
-  for(int k = 1; k <= 9; k++)//digits
+  else
   {
-    if(!UsedInRow(i, k) &&  //if choice is legal
-       !UsedInCol(j, k)&&
-       !UsedInSquare(i, j, k))
-       {
-         setCell(i, j, k);
-         solve(b);
-         setCell(i, j, 0);
-       }
+    firstEmptyCell();
+    for(int k = 1; k <= 9; k++)//digits
+    {
+      bool r = UsedInRow(row, k);
+      bool c = UsedInCol(col, k);
+      bool s = UsedInSquare(row, col, k);
+      bool illegal = (r || c || s); //no legal choice for digit
+
+      if(illegal == true && k == 9) //deadend
+        break;
+
+      else if(illegal == true)  //if choice is illegal
+           continue;
+      else
+      {
+        setCell(row, col, k);
+        solve(b); //recursive call not working
+        setCell(row, col, 0);
+        continue;
+      }
+    }
+      cout<<"\n\n\nTotal # of recursions: "<< count;
     }
 }
