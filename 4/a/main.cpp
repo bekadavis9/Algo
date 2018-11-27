@@ -38,6 +38,7 @@ int main()
 
 
          b1.solve(b1);
+         b1.recursions();
 
          cout<<"\n";
       }

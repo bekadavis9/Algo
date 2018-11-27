@@ -53,6 +53,7 @@ class board
       bool UsedInSquare(int row, int col, int num);
       ValueType firstEmptyCell();
       void solve(board b);
+      void recursions();
 
 
    private:
@@ -191,12 +192,10 @@ void board::print()
 
 void board::DigitsInRow(int row)
 {
-  /*
   for(int i = 0; i < 9; i++)
   {
     rowDigits[i] = 0;
   }
-  */
 
   for(int j = 1; j<= 9; j++)  //traverse through columns
   {
@@ -380,18 +379,16 @@ void board::solve(board b)
   }
   else
   {
-    b.firstEmptyCell(); //sets row and col
-    cout<<"row: "<<row;
-    cout<<"col:"<<col;
+    firstEmptyCell(); //sets row and col
+    //cout<<"row: "<<row;
+    //cout<<"col:"<<col;
 
     for(int k = 1; k <= 9; k++)//digits
     {
-      bool r = b.UsedInRow(row, k); //digit is used in the row
-      bool c = b.UsedInCol(col, k);
-      bool s = b.UsedInSquare(row, col, k);
+      bool r = UsedInRow(row, k); //digit is used in the row
+      bool c = UsedInCol(col, k);
+      bool s = UsedInSquare(row, col, k);
       bool illegal = (r || c || s); //no legal choice for digit
-
-      
 
       if(illegal == true && k == 9) //deadend
         break;
@@ -402,13 +399,16 @@ void board::solve(board b)
       else
       {
         b.setCell(row, col, k);
-        //b.print();
-        solve(b); //recursive call not working
-        setCell(row, col, 0);
+        b.print();
+        b.solve(b); //recursive call not working
+        b.setCell(row, col, 0);
         continue;
       }
     }
+  }
+}
 
-      cout<<"\n\n\nTotal # of recursions: "<< count;
-    }
+void board::recursions()
+{
+  cout<<"\n\n\nTotal # of recursions: "<< count;
 }
