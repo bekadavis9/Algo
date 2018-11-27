@@ -35,8 +35,9 @@ int main()
       {
       	 b1.initialize(fin);
       	 b1.print();
-      	 b1.printConflicts();
-         //b1.DigitsInSquare(1,4);  //(row, col)
+      	 //b1.printConflicts();
+         b1.solve(b1);
+
          cout<<"\n";
       }
    }

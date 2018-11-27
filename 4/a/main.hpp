@@ -30,6 +30,7 @@ const int MinValue = 1;
 const int MaxValue = 9;
 
 int numSolutions = 0;
+//int count = 0;
 
 class board
 // Stores the entire Sudoku board
@@ -51,6 +52,8 @@ class board
       bool UsedInRow(int row, int num);
       bool UsedInCol(int col, int num);
       bool UsedInSquare(int row, int col, int num);
+      void solve(board b);
+
 
    private:
       matrix<ValueType> value;
@@ -61,6 +64,7 @@ class board
       int numRows;
       int numCols;
       int numDigits;
+      int count = 0;
 };
 
 board::board(int sqSize)
@@ -304,7 +308,7 @@ bool board::UsedInSquare(int row, int col, int num)
 
 matrix <vector <bool> > board::printConflicts()
 {
-  vector <bool> temp;
+  //vector <bool> temp;
   matrix <vector<bool> > conflicts(9, 9);
   bool r, c, s;
   for(int i = 1; i <= 9; i++)//rows
@@ -313,27 +317,52 @@ matrix <vector <bool> > board::printConflicts()
     {
       for(int k = 1; k <= 9; k++)//digits
       {
+        conflicts[i][j].resize(9);
         r = UsedInRow(i, k);
         c = UsedInCol(j, k);
         s = UsedInSquare(i, j, k);
 
         if(r || c || s)
-          temp.push_back(true);
+          conflicts[i][j].push_back(true);
         else
-          temp.push_back(false);
-
-        //cout<<"\n\n\n";
-        //cout<<"row:" <<i<< "   col: "<<j<<"\n\n";
-
+          conflicts[i][j].push_back(false);
       }
-      for (int h = 0; h < temp.size(); h++)
-      {
-        conflicts[i][j].push_back(temp[h]);
-        //cout<<temp[h];
-      }
-      temp.clear();
     }
   }
-  //return conflicts;
-  return 0;
+  return conflicts;
+}
+
+
+void board::solve(board b)
+{
+  count ++;
+  int i, j = 1;
+  while(i <= 9) //rows
+  {
+    while(j <= 9)//cols
+    {
+      if (isBlank(i, j))
+        break;
+      else if(getCell(i, j) == 'Z')
+      {
+        cout<<"Board is solved!\n";
+        b.print();
+        //exit;
+      }
+      j++;
+    }
+    i++;
+  }
+
+  for(int k = 1; k <= 9; k++)//digits
+  {
+    if(!UsedInRow(i, k) &&  //if choice is legal
+       !UsedInCol(j, k)&&
+       !UsedInSquare(i, j, k))
+       {
+         setCell(i, j, k);
+         solve(b);
+         setCell(i, j, 0);
+       }
+    }
 }
