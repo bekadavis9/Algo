@@ -191,22 +191,29 @@ void board::print()
 
 void board::DigitsInRow(int row)
 {
+  /*
   for(int i = 0; i < 9; i++)
   {
     rowDigits[i] = 0;
   }
+  */
 
   for(int j = 1; j<= 9; j++)  //traverse through columns
   {
     if(isBlank(row, j))
-      continue;
+      rowDigits[j-1] = 0;
     else
       rowDigits[j-1] = getCell(row,j);  //place each number from the row into arr
+    continue;
   }
 }
 
 void board::DigitsInCol(int col)
 {
+  for(int i = 0; i < 9; i++)
+  {
+    colDigits[i] = 0;
+  }
   for(int i = 1; i <= 9; i++)   //traverse through rows
   {
     if(isBlank(i,col))
@@ -261,6 +268,10 @@ void board::DigitsInSquare(int row, int col)
       c = 7;
       break;
     }
+    for(int x = 0; x < 9; x++)
+    {
+      sqDigits[x] = 0;
+    }
 
     for(int i = r; i <= r + 2; i++) //stay in row of square
     {
@@ -278,10 +289,12 @@ void board::DigitsInSquare(int row, int col)
 bool board::UsedInRow(int row, int num)
 {
   DigitsInRow(row);
-  for(int i  = 0; i < numRows; i++)
+  for(int i  = 0; i < 9; i++)
   {
     if(rowDigits[i] == num)
       return true;
+    else
+      continue;
   }
   return false;
 }
@@ -289,10 +302,12 @@ bool board::UsedInRow(int row, int num)
 bool board::UsedInCol(int col, int num)
 {
   DigitsInCol(col);
-  for(int i  = 0; i < numCols; i++)
+  for(int i  = 0; i < 9; i++)
   {
     if(colDigits[i] == num)
       return true;
+    else
+      continue;
   }
   return false;
 }
@@ -300,7 +315,7 @@ bool board::UsedInCol(int col, int num)
 bool board::UsedInSquare(int row, int col, int num)
 {
   DigitsInSquare(row, col);
-  for(int i  = 0; i < numRows; i++)
+  for(int i  = 0; i < 9; i++)
   {
     if(sqDigits[i] == num)
       return true;
@@ -357,35 +372,43 @@ ValueType board::firstEmptyCell()
 void board::solve(board b)
 {
   count ++;
-  if(firstEmptyCell() == 'Z')
+  if(firstEmptyCell() == 'Z') //if fully solved
   {
     cout<<"Board is solved!\n";
     b.print();
-    exit(EXIT_FAILURE);
+    exit(EXIT_FAILURE); //"return -1"
   }
   else
   {
-    firstEmptyCell();
+    b.firstEmptyCell(); //sets row and col
+    cout<<"row: "<<row;
+    cout<<"col:"<<col;
+
     for(int k = 1; k <= 9; k++)//digits
     {
-      bool r = UsedInRow(row, k);
-      bool c = UsedInCol(col, k);
-      bool s = UsedInSquare(row, col, k);
+      bool r = b.UsedInRow(row, k); //digit is used in the row
+      bool c = b.UsedInCol(col, k);
+      bool s = b.UsedInSquare(row, col, k);
       bool illegal = (r || c || s); //no legal choice for digit
+
+      
 
       if(illegal == true && k == 9) //deadend
         break;
 
       else if(illegal == true)  //if choice is illegal
-           continue;
+        continue;
+
       else
       {
-        setCell(row, col, k);
+        b.setCell(row, col, k);
+        //b.print();
         solve(b); //recursive call not working
         setCell(row, col, 0);
         continue;
       }
     }
+
       cout<<"\n\n\nTotal # of recursions: "<< count;
     }
 }
