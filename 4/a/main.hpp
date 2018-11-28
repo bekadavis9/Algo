@@ -54,8 +54,8 @@ class board
       ValueType firstEmptyCell();
       void solve(board b);
       void recursions();
-      int shortestPath(int row, int col);
-
+      void shortestPath(int row, int col);
+      int runShortest();
 
    private:
       matrix<ValueType> value;
@@ -421,11 +421,15 @@ void board::recursions()
 }
 
 
-int board::shortestPath(int row, int col)
+void board::shortestPath(int row, int col)
 {
+  count++;
   int used[] = {0,0,0,0,0,0,0,0,0};
   counter = 0;
-  vector <int> shortest;
+
+
+  if(getCell(row, col) == 'Z')
+    exit(EXIT_FAILURE);
 
   for(int k = 1; k <= 9; k++)
   {
@@ -437,28 +441,33 @@ int board::shortestPath(int row, int col)
   {
     if(used[x] != 0)
       counter ++;
+    //cout<<used[x];
   }
+}
 
+int board::runShortest()
+{
+  vector <int> shortest(2,0);
   for(int i = 1; i <=9; i++)
   {
     for(int j = 1; j <=9; j++)
     {
       if(!isBlank(i, j))  //if already filled
         continue;
-      else
+
+      //cout<<"\nCounter: "<<counter;
+      //cout<<"\nMax: "<<max;
+      if(counter > max)
       {
-        cout<<"\nCounter: "<<counter;
-        cout<<"\nMax: "<<max;
-        if(counter > max)
-        {
-          max = counter;
-          shortest.push_back(row);
-          shortest.push_back(col);
-        }
-        shortestPath(i, j);
+        max = counter;
+        shortest.push_back(row);
+        shortest.push_back(col);
       }
+      cout<<"\nRow: "<<row;
+      cout<<"\nCol: "<<col;
+      cout<<"\nCount: "<<count<<"\n\n";
+      shortestPath(i, j);
     }
   }
-//return shortest;
-  return -1;
+  return 0;
 }
