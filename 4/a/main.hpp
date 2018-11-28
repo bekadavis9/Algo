@@ -55,7 +55,7 @@ class board
       void solve(board b);
       void recursions();
       void shortestPath(int row, int col);
-      int runShortest();
+      void runShortest();
 
    private:
       matrix<ValueType> value;
@@ -385,7 +385,8 @@ void board::solve(board b)
   }
   else
   {
-    firstEmptyCell(); //sets row and col
+    runShortest();
+    //firstEmptyCell(); //sets row and col
     //cout<<"row: "<<row;
     //cout<<"col:"<<col;
 
@@ -445,7 +446,7 @@ void board::shortestPath(int row, int col)
   }
 }
 
-int board::runShortest()
+void board::runShortest()
 {
   vector <int> shortest(2,0);
   for(int i = 1; i <=9; i++)
@@ -460,14 +461,15 @@ int board::runShortest()
       if(counter > max)
       {
         max = counter;
-        shortest.push_back(row);
-        shortest.push_back(col);
+        shortest.push_back(i);
+        shortest.push_back(j);
+        row = i;
+        col = j;
       }
-      cout<<"\nRow: "<<row;
-      cout<<"\nCol: "<<col;
-      cout<<"\nCount: "<<count<<"\n\n";
+      //cout<<"\nRow: "<<i;
+      //cout<<"\nCol: "<<j;
+      //cout<<"\nCount: "<<count<<"\n\n";
       shortestPath(i, j);
     }
   }
-  return 0;
 }
