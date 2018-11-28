@@ -54,7 +54,7 @@ class board
       ValueType firstEmptyCell();
       void solve(board b);
       void recursions();
-      ValueType shortestPath(int row, int col);
+      int shortestPath(int row, int col);
 
 
    private:
@@ -70,6 +70,8 @@ class board
       int row;
       int col;
       int max;
+      int counter;
+
 };
 
 board::board(int sqSize)
@@ -82,6 +84,7 @@ board::board(int sqSize)
    numDigits = 9;
    count = 0;
    max = 0;
+   counter = 0;
 }
 
 void board::clear()
@@ -411,17 +414,18 @@ void board::solve(board b)
   }
 }
 
+
 void board::recursions()
 {
   cout<<"\n\n\nTotal # of recursions: "<< count;
 }
 
-ValueType board::shortestPath(int row, int col)
+
+int board::shortestPath(int row, int col)
 {
   int used[] = {0,0,0,0,0,0,0,0,0};
-  int counter;
-  int y;
-  ValueType shortest;
+  counter = 0;
+  vector <int> shortest;
 
   for(int k = 1; k <= 9; k++)
   {
@@ -434,17 +438,27 @@ ValueType board::shortestPath(int row, int col)
     if(used[x] != 0)
       counter ++;
   }
+
   for(int i = 1; i <=9; i++)
   {
-    for(int j = 2; j <=9; j++)
+    for(int j = 1; j <=9; j++)
     {
-      shortestPath(i, j);
-      if(counter > max)
+      if(!isBlank(i, j))  //if already filled
+        continue;
+      else
       {
-        max = counter;
-        shortest = getCell(i, j);
+        cout<<"\nCounter: "<<counter;
+        cout<<"\nMax: "<<max;
+        if(counter > max)
+        {
+          max = counter;
+          shortest.push_back(row);
+          shortest.push_back(col);
+        }
+        shortestPath(i, j);
       }
     }
   }
-return shortest;
+//return shortest;
+  return -1;
 }
