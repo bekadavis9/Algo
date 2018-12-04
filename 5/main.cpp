@@ -1,3 +1,15 @@
+// Project 5
+
+#include <iostream>
+#include <limits.h>
+#include "d_except.h"
+#include <list>
+#include <fstream>
+#include "main.hpp"
+
+using namespace std;
+
+
 int main()
 {
    char x;
@@ -20,6 +32,7 @@ int main()
       while (fin && fin.peek() != 'Z')
       {
          maze m(fin);
+         //m.setMap(0,0,1);
       }
 
 
