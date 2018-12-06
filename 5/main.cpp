@@ -1,4 +1,10 @@
-// Project 5
+/*
+Algorithms 12/5/18
+Project #5 main.cpp file
+Word Search
+Rebekah Davis and Julian Perez
+Group ID: DAVPER (24)
+*/
 
 #include <iostream>
 #include <limits.h>
@@ -32,7 +38,8 @@ int main()
       while (fin && fin.peek() != 'Z')
       {
          maze m(fin);
-         //m.setMap(0,0,1);
+         m.setVertices();
+         m.findPathRecursive(0,0,9,6);
       }
 
 

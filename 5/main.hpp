@@ -1,4 +1,10 @@
-// Project 5
+/*
+Algorithms 12/5/18
+Project #5 main.hpp file
+Word Search
+Rebekah Davis and Julian Perez
+Group ID: DAVPER (24)
+*/
 
 #include <iostream>
 #include <limits.h>
@@ -15,13 +21,17 @@ class maze
    public:
       maze(ifstream &fin);
       void print(int,int,int,int);
-      bool isLegal(int i, int j);
+      bool isLegal(int i, int j); // Return value stored at (i,j) in maze
+
+      void setVertices();
+      void setEdges();
 
       void setMap(int i, int j, int n);
       int getMap(int i, int j) const;
+
       void mapMazeToGraph(graph &g);
-      vector <node> setNodes();
-      vector <int> findPathRecursive(int i, int j);
+
+      void findPathRecursive(int sR, int sC, int dR, int dC);
 
 
    private:
@@ -32,69 +42,12 @@ class maze
       matrix<int> map;      // Mapping from maze (i,j) values to node index values
                             //the maze in matrix form
       graph g;
-      vector <node> v;
+      vector <string> path;
+      matrix<node> v;
+
+      //bool isNode;
 
 };
-
-void maze::setMap(int i, int j, int n)
-// Set mapping from maze cell (i,j) to graph node n.
-{
-  //up, down, left, right - check if O
-      //if yes, add to map
-      //if no, check next location
-
-  //i = row(x), j = col(y)
-
-  int x, y;
-  x = i;
-  y = j;
-
-  //check if x,y are 0 or beyond end (i,j = 0 or length())
-
-  if(value[i][j]) //if 0
-    g.addNode(0);
-  else
-    exit(EXIT_FAILURE); //"return -1"
-
-  switch(y)
-  {
-    case 1: //up
-    y = j-1;
-    if(value[x][y])
-      g.addNode(0);
-    else
-      break;
-
-    case 2: //down
-    y = j+1;
-    if(value[x][y])
-      g.addNode(0);
-    else
-      break;
-
-    switch(x)
-    {
-      case 3: //left
-          x = i-1;
-          if(value[x][y])
-            g.addNode(0);
-          else
-            break;
-
-      case 4: //right
-          x = i+1;
-          if(value[x][y])
-            g.addNode(0);
-          else
-            break;
-    }
-  }
-}
-
-int maze ::getMap(int i, int j) const
-// Return mapping of maze cell (i,j) in the graph.
-{
-}
 
 maze::maze(ifstream &fin)
 // Initializes a maze by reading values from fin.  Assumes that the
@@ -160,74 +113,246 @@ bool maze::isLegal(int i, int j)
    return value[i][j];
 }
 
-void maze::mapMazeToGraph(graph &g)
-// Create a graph g that represents the legal moves in the maze m.
+void maze::setVertices()
 {
-
-}
-
-vector <node> maze::setNodes()
-{
-  node n;
-  int count = 1; //IDs are 1-81
-  for(int j= 0; j < cols; j++)
+  NodeWeight w0 = 0;
+  NodeWeight w1 = 1;
+  for(int i = 0; i < rows; i++)
   {
-    for(int i = 0; i < rows; i++)
+    for(int j = 0; j < cols; j++)
     {
-      n.setNode(count, 0, false, false);
-      v.push_back(n);
-      count ++;
+      if(isLegal(i, j))
+      {
+        node n;
+        v[i][j] = n;
+        v[i][j].setId(w1);
+      }
+      else
+      {
+        node n;
+        v[i][j] = n;
+        v[i][j].setId(w0);
+      }
     }
   }
-  return v;
 }
 
 
-vector <int> maze::findPathRecursive(int i, int j)
+
+
+//don't necessarily need
+void maze::setMap(int i, int j, int n)
+// Set mapping from maze cell (i,j) to graph node n.
 {
-  for(int a = 0; a < v.size(); a++)
-  {
-    v[a].unVisit();
-  }
 
-  int id = map[i][j].getID();
+}
 
-  v(id).visit();
-  int x = i;
-  int y = j;
+/*
+void maze::setMap(int i, int j, int n)
+// Set mapping from maze cell (i,j) to graph node n.
+{
+  //up, down, left, right - check if O
+      //if yes, add to map
+      //if no, check next location
+
+  //i = row(x), j = col(y)
+
+  int x, y;
+  x = i;
+  y = j;
+
+  //check if x,y are 0 or beyond end (i,j = 0 or length())
+
+  if(isLegal(i,j)) //if 0
+    g.addNode(0);
+  else
+    exit(EXIT_FAILURE); //"return -1"
 
   switch(y)
   {
     case 1: //up
     y = j-1;
-    if(map[x][y].isVisited())
-      break;
+    if(isLegal(x,y))
+      g.addNode(0);
     else
-      findPathRecursive(x,y);
+      break;
 
     case 2: //down
     y = j+1;
-    if(map[x][y].isVisited())
-      break;
+    if(isLegal(x,y))
+      g.addNode(0);
     else
-      findPathRecursive(x,y);
+      break;
 
     switch(x)
     {
       case 3: //left
           x = i-1;
-          if(map[x][y].isVisited())
-            break;
+          if(isLegal(x,y))
+            g.addNode(0);
           else
-            findPathRecursive(x,y);
+            break;
 
       case 4: //right
           x = i+1;
-          if(map[x][y].isVisited())
-            break;
+          if(isLegal(x,y))
+            g.addNode(0);
           else
-            findPathRecursive(x,y);
+            break;
+    }
+  }
+}
+*/
+
+int maze ::getMap(int i, int j) const
+// Return mapping of maze cell (i,j) in the graph.
+{
+}
+
+
+
+
+
+void maze::mapMazeToGraph(graph &g)
+// Create a graph g that represents the legal moves in the maze m.
+{
+  NodeWeight w = 0;
+  int x, y;
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < cols; j++)
+    {
+      if(isLegal(i,j))
+      {
+        g.addNode(w);
+        //g.mark(i,j);
+      }
+      else
+        continue;
     }
   }
 
+  for(int i = 0; i < rows; i++)
+  {
+    for(int j = 0; j < cols; j++)
+    {
+      switch(y)
+      {
+        case 1: //up
+        y = j-1;
+        x = i;
+        if(isLegal(x,y) && isLegal(i,j))
+        {
+          g.addEdge(i,j,w);
+        }
+        else
+          break;
+
+        case 2: //down
+        y = j+1;
+        x = i;
+        if(isLegal(x,y) && isLegal(i,j))
+        {
+          g.addEdge(i,j,w);
+        }
+        else
+          break;
+
+        switch(x)
+        {
+          case 3: //left
+              x = i-1;
+              y = j;
+              if(isLegal(x,y) && isLegal(i,j))
+              {
+                g.addEdge(i,j,w);
+              }
+              else
+                break;
+
+          case 4: //right
+              x = i+1;
+              y = j;
+              if(isLegal(x,y) && isLegal(i,j))
+              {
+                g.addEdge(i,j,w);
+              }
+              else
+                break;
+        }
+      }
+    }
+  }
+}
+
+void maze::findPathRecursive(
+    int sourceR, int sourceC, int destR, int destC)
+{
+  int x, y;
+  g.clearVisit();
+
+  if(!isLegal(sourceR, sourceC) || !isLegal(destR, destC))
+    exit(EXIT_FAILURE);
+
+  v[sourceR][sourceC].visit();
+
+  for(int i = sourceR; i < rows; i++)
+  {
+    for(int j = sourceC; j < cols; j++)
+    {
+      switch(y)
+      {
+        case 1: //up
+        y = j-1;
+        x = i;
+        if(v[x][y].getId() == 1)
+        {
+          path.push_back("up  ");
+          findPathRecursive(x, y, destR, destC);
+        }
+        else
+          break;
+
+        case 2: //down
+        y = j+1;
+        x = i;
+        if(v[x][y].getId() == 1)
+        {
+          path.push_back("down  ");
+          findPathRecursive(x, y, destR, destC);
+        }
+        else
+          break;
+
+        switch(x)
+        {
+          case 3: //left
+              x = i-1;
+              y = j;
+              if(v[x][y].getId() == 1)
+              {
+                path.push_back("left  ");
+                findPathRecursive(x, y, destR, destC);
+              }
+              else
+                break;
+
+          case 4: //right
+              x = i+1;
+              y = j;
+              if(v[x][y].getId() == 1)
+              {
+                path.push_back("right  ");
+                findPathRecursive(x, y, destR, destC);
+              }
+              else
+                break;
+        }
+      }
+    }
+  }
+  for(int a = 0; a < path.size(); a++)
+  {
+    cout<< path[a];
+  }
 }
