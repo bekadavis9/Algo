@@ -113,15 +113,17 @@ bool maze::isLegal(int i, int j)
    return value[i][j];
 }
 
+
 void maze::setVertices()
 {
+  v.resize(rows, cols);
   NodeWeight w0 = 0;
   NodeWeight w1 = 1;
   for(int i = 0; i < rows; i++)
   {
     for(int j = 0; j < cols; j++)
     {
-      if(isLegal(i, j))
+      if(value[i][j] == true)
       {
         node n;
         v[i][j] = n;
@@ -204,11 +206,11 @@ void maze::setMap(int i, int j, int n)
 }
 */
 
-int maze ::getMap(int i, int j) const
+/*int maze ::getMap(int i, int j) const
 // Return mapping of maze cell (i,j) in the graph.
 {
 }
-
+*/
 
 
 
@@ -222,10 +224,10 @@ void maze::mapMazeToGraph(graph &g)
   {
     for(int j = 0; j < cols; j++)
     {
-      if(isLegal(i,j))
+      if(value[i][j] == true)
       {
         g.addNode(w);
-        //g.mark(i,j);
+        g.mark(i,j);
       }
       else
         continue;
@@ -241,7 +243,7 @@ void maze::mapMazeToGraph(graph &g)
         case 1: //up
         y = j-1;
         x = i;
-        if(isLegal(x,y) && isLegal(i,j))
+        if(value[x][y] == true && value[i][j] == true)
         {
           g.addEdge(i,j,w);
         }
@@ -251,7 +253,7 @@ void maze::mapMazeToGraph(graph &g)
         case 2: //down
         y = j+1;
         x = i;
-        if(isLegal(x,y) && isLegal(i,j))
+        if(value[x][y] == true && value[i][j] == true)
         {
           g.addEdge(i,j,w);
         }
@@ -263,7 +265,7 @@ void maze::mapMazeToGraph(graph &g)
           case 3: //left
               x = i-1;
               y = j;
-              if(isLegal(x,y) && isLegal(i,j))
+              if(value[x][y] == true && value[i][j] == true)
               {
                 g.addEdge(i,j,w);
               }
@@ -273,7 +275,7 @@ void maze::mapMazeToGraph(graph &g)
           case 4: //right
               x = i+1;
               y = j;
-              if(isLegal(x,y) && isLegal(i,j))
+              if(value[x][y] == true && value[i][j] == true)
               {
                 g.addEdge(i,j,w);
               }
@@ -291,10 +293,10 @@ void maze::findPathRecursive(
   int x, y;
   g.clearVisit();
 
-  if(!isLegal(sourceR, sourceC) || !isLegal(destR, destC))
+  if(value[sourceR][sourceC] == false || value[destR][destC] == false)
     exit(EXIT_FAILURE);
 
-  v[sourceR][sourceC].visit();
+  //v[sourceR][sourceC].visit();
 
   for(int i = sourceR; i < rows; i++)
   {
@@ -312,7 +314,7 @@ void maze::findPathRecursive(
         }
         else
           break;
-
+/*
         case 2: //down
         y = j+1;
         x = i;
@@ -347,7 +349,7 @@ void maze::findPathRecursive(
               }
               else
                 break;
-        }
+        }*/
       }
     }
   }
