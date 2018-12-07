@@ -43,9 +43,7 @@ class maze
                             //the maze in matrix form
       graph g;
       vector <string> path;
-      matrix<node> v;
-
-      //bool isNode;
+      matrix <node> v;
 
 };
 
@@ -70,6 +68,12 @@ maze::maze(ifstream &fin)
       }
 
    map.resize(rows,cols);
+
+   for(int a = 0; a < path.size(); a++)
+   {
+     path[a] = "";
+   }
+   path.resize(rows*cols);
 }
 
 void maze::print(int goalI, int goalJ, int currI, int currJ)
@@ -113,27 +117,27 @@ bool maze::isLegal(int i, int j)
    return value[i][j];
 }
 
-
 void maze::setVertices()
 {
   v.resize(rows, cols);
-  NodeWeight w0 = 0;
-  NodeWeight w1 = 1;
+
   for(int i = 0; i < rows; i++)
   {
     for(int j = 0; j < cols; j++)
     {
-      if(value[i][j] == true)
+      if(value[i][j])
       {
         node n;
+        n.setId(1);
+        n.setWeight(0);
         v[i][j] = n;
-        v[i][j].setId(w1);
       }
       else
       {
         node n;
+        n.setId(0);
+        n.setWeight(0);
         v[i][j] = n;
-        v[i][j].setId(w0);
       }
     }
   }
@@ -226,8 +230,8 @@ void maze::mapMazeToGraph(graph &g)
     {
       if(value[i][j] == true)
       {
-        g.addNode(w);
-        g.mark(i,j);
+        g.addNode(v[i][j]);
+        //g.mark(i,j);
       }
       else
         continue;
@@ -287,6 +291,8 @@ void maze::mapMazeToGraph(graph &g)
   }
 }
 
+
+
 void maze::findPathRecursive(
     int sourceR, int sourceC, int destR, int destC)
 {
@@ -311,10 +317,11 @@ void maze::findPathRecursive(
         {
           path.push_back("up  ");
           findPathRecursive(x, y, destR, destC);
+          break;
         }
         else
           break;
-/*
+
         case 2: //down
         y = j+1;
         x = i;
@@ -322,6 +329,7 @@ void maze::findPathRecursive(
         {
           path.push_back("down  ");
           findPathRecursive(x, y, destR, destC);
+          break;
         }
         else
           break;
@@ -335,6 +343,7 @@ void maze::findPathRecursive(
               {
                 path.push_back("left  ");
                 findPathRecursive(x, y, destR, destC);
+                break;
               }
               else
                 break;
@@ -346,15 +355,19 @@ void maze::findPathRecursive(
               {
                 path.push_back("right  ");
                 findPathRecursive(x, y, destR, destC);
+                break;
               }
               else
                 break;
-        }*/
+        }
       }
     }
   }
+  cout<<"\npath\n";
+
   for(int a = 0; a < path.size(); a++)
   {
     cout<< path[a];
   }
+
 }

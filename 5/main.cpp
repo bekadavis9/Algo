@@ -37,9 +37,12 @@ int main()
       graph g;
       while (fin && fin.peek() != 'Z')
       {
+
          maze m(fin);
+         m.print(0,0,6,9);
+         //m.mapMazeToGraph(g);
          m.setVertices();
-         m.findPathRecursive(0,0,9,6);
+         //m.findPathRecursive(0,0,6,9);
       }
 
 
